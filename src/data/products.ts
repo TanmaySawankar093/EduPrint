@@ -2,7 +2,7 @@ import keychain from "../assets/paid/key.jpg";
 import bagpack from "../assets/paid/bag.jpg";
 import calender from "../assets/paid/calender.jpg";
 import mousepad from "../assets/paid/mousepad.jpg";
-import notebook from "../assets/paid/notebook.jpg";
+import notebook from "../assets/paid/Notebook.jpg";
 import pen from "../assets/paid/pen.jpg";
 import gstposter from "../assets/Free/gstposter.jpg";
 import freelancing from "../assets/Free/freelancing.jpg";
