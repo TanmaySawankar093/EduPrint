@@ -6,13 +6,15 @@ import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import { Star, ShoppingCart, Heart, Share2, ChevronLeft, ChevronRight, Truck, Shield, RefreshCw, Award } from "lucide-react";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { products } from "@/data/products";
 
 interface ProductDetailPageProps {
   product: any;
   onBack: () => void;
 }
 
-const ProductDetailPage = ({ product, onBack }: ProductDetailPageProps) => {
+const ProductDetailPage = ( ProductDetailPageProps) => {
   // const { productId } = useParams();
   const [quantity, setQuantity] = useState(1);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -21,6 +23,24 @@ const ProductDetailPage = ({ product, onBack }: ProductDetailPageProps) => {
   const [isCustomizationOpen, setIsCustomizationOpen] = useState(false);
     const { addToCart, updateQuantity, getCartItemQuantity } = useCart();
     const { toast } = useToast();
+
+    const { id } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const onBack = () => {
+  navigate("/products"); // or your actual route path
+};
+  
+  // Try to get product from location state or fetch by id
+  const product = location.state?.product || products.find(p => product.id === id);
+  
+  if (!product) {
+    return <div className="text-center py-12">Product not found</div>;
+  }
+  
+  const handleBack = () => {
+    navigate("/products");
+  };
 
   // Mock product data for demo
   const mockProduct = product || {

@@ -101,3 +101,6 @@
     @apply bg-background text-foreground;
   }
 }
+.bg-hero {
+  background-image: url('../src/assets/fb.png');
+}

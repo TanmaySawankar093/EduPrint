@@ -11,6 +11,7 @@ import CartDrawer from "./CartDrawer";
 import AuthModal from "./AuthModal";
 import OrderHistory from "./OrderHistory";
 import logo from "@/assets/edulogo.png"; // Adjust the path as necessary
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 interface NavigationProps {
   onSearch?: (query: string) => void;
@@ -26,10 +27,10 @@ const Navigation = ({ onSearch }: NavigationProps) => {
   const { totalItems } = useCart();
 
 const navItems = [
-  // { name: "Home", href: "#" },
-  { name: "Products", href: "#products" },
-  { name: "Free Templates", href: "#free-templates", isFunky: true },
-];
+    { name: "Home", path: "/", isFunky: true },
+    { name: "Products", path: "/products" },
+    { name: "Free Templates", path: "/templates", isFunky: true },
+  ];
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,23 +67,26 @@ const navItems = [
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
-      {navItems.map((item) => (
-        <a
-          key={item.name}
-          href={item.href}
-          className={`relative font-medium transition-colors duration-200 ${
-            activeTab === item.href
-              ? "text-blue-700"
-              : "text-gray-700 hover:text-blue-700"
-          }`}
-        >
-          {item.name}
-          {activeTab === item.href && (
-            <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-blue-700 rounded"></span>
-          )}
-        </a>
-      ))}
-    </div>
+          {navItems.map((item) => (
+            <NavLink
+              key={item.name}
+              to={item.path}
+              className={({ isActive }) => `
+                relative font-medium transition-colors duration-200
+                ${isActive ? "text-blue-700" : "text-gray-700 hover:text-blue-700"}
+              `}
+            >
+              {({ isActive }) => (
+                <>
+                  {item.name}
+                  {isActive && (
+                    <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-blue-700 rounded"></span>
+                  )}
+                </>
+              )}
+            </NavLink>
+          ))}
+        </div>
 
             {/* Search Bar */}
             <div className="hidden md:flex items-center flex-1 max-w-md mx-8">
@@ -162,63 +166,26 @@ const navItems = [
 
           {/* Mobile Navigation */}
           {isMobileMenuOpen && (
-            <div className="md:hidden border-t border-gray-200 py-4">
-              <div className="space-y-4">
-                {/* Mobile Search */}
-                <form onSubmit={handleSearch} className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                  <Input
-                    type="text"
-                    placeholder="Search products..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 pr-4 py-2 w-full border-gray-300 rounded-lg"
-                  />
-                </form>
-                
-                {/* Mobile Nav Items */}
-                {navItems.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    className="block text-gray-700 hover:text-blue-700 font-medium py-2"
-                  >
-                    {item.name}
-                  </a>
-                ))}
-                
-                {isAuthenticated ? (
-                  <div className="space-y-2">
-                    <Button
-                      variant="outline"
-                      onClick={() => setIsOrderHistoryOpen(true)}
-                      className="w-full justify-start"
-                    >
-                      <Package className="h-4 w-4 mr-2" />
-                      Order History
-                    </Button>
-                    <Button
-                      variant="outline"
-                      onClick={logout}
-                      className="w-full justify-start"
-                    >
-                      <LogOut className="h-4 w-4 mr-2" />
-                      Logout
-                    </Button>
-                  </div>
-                ) : (
-                  <Button
-                    variant="outline"
-                    onClick={() => setIsAuthOpen(true)}
-                    className="w-full justify-start"
-                  >
-                    <User className="h-4 w-4 mr-2" />
-                    Login / Sign Up
-                  </Button>
-                )}
-              </div>
-            </div>
-          )}
+          <div className="md:hidden border-t border-gray-200 py-4">
+            {/* ... mobile search */}
+            
+            {/* Mobile Nav Items */}
+            {navItems.map((item) => (
+              <NavLink
+                key={item.name}
+                to={item.path}
+                className={({ isActive }) => `
+                  block ${isActive ? "text-blue-700" : "text-gray-700 hover:text-blue-700"} 
+                  font-medium py-2
+                `}
+              >
+                {item.name}
+              </NavLink>
+            ))}
+            
+            {/* ... rest of mobile nav */}
+          </div>
+        )}
         </div>
       </nav>
 

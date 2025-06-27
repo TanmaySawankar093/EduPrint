@@ -11,6 +11,10 @@ import NotFound from "./pages/NotFound";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import ProductDetailPage from "@/components/ProductDetailPage";
+import Layout from "./pages/Layout";
+import HomePage from "./pages/HomePage";
+import ProductsPage from "./pages/ProductsPage";
+import TemplatesPage from "./pages/TemplatesPage";
 
 const queryClient = new QueryClient();
 
@@ -22,13 +26,15 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-    <Route path="/product/:productId" element={<ProductDetailPage />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<HomePage />} />
+          <Route path="products" element={<ProductsPage />} />
+          <Route path="products/:id" element={<ProductDetailPage />} />
+          <Route path="templates" element={<TemplatesPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
         </CartProvider>
       </AuthProvider>
     </TooltipProvider>
