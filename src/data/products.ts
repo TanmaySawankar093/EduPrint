@@ -1,9 +1,9 @@
-import keychain from "../assets/Paid/key .jpg";
-import bagpack from "../assets/Paid/bag.jpg";
-import calender from "../assets/Paid/calender.jpg";
-import mousepad from "../assets/Paid/mousepad.jpg";
-import notebook from "../assets/Paid/notebook.jpg";
-import pen from "../assets/Paid/pen.jpg";
+import keychain from "../assets/paid/key.jpg";
+import bagpack from "../assets/paid/bag.jpg";
+import calender from "../assets/paid/calender.jpg";
+import mousepad from "../assets/paid/mousepad.jpg";
+import notebook from "../assets/paid/notebook.jpg";
+import pen from "../assets/paid/pen.jpg";
 import gstposter from "../assets/Free/gstposter.jpg";
 import freelancing from "../assets/Free/freelancing.jpg";
 import jobposting from "../assets/Free/jobposting.jpg";
