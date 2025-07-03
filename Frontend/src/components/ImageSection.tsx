@@ -38,20 +38,20 @@ const FormatSelectionModal = ({ isOpen, onClose, onSelect, templateName, isDownl
               key={format.value}
               onClick={() => onSelect(format.value)}
               disabled={isDownloading}
-              className="w-full text-left p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed relative"
+              className="w-full text-left p-4 border border-gray-200 rounded-lg hover:border-gray-400 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed relative"
             >
               <div className="flex justify-between items-start">
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="font-medium text-gray-900">{format.label}</span>
                     {format.recommended && (
-                      <Badge className="bg-blue-100 text-blue-800 text-xs">Recommended</Badge>
+                      <Badge className="bg-black text-white text-xs">Recommended</Badge>
                     )}
                   </div>
                   <p className="text-sm text-gray-600 mt-1">{format.description}</p>
                 </div>
                 {isDownloading && (
-                  <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
+                  <Loader2 className="h-4 w-4 animate-spin text-black" />
                 )}
               </div>
             </button>
@@ -215,31 +215,33 @@ const ImageSection = () => {
     <>
       <section id="free-templates" className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">Free Templates & Resources</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <div className="text-left mb-12">
+            <h2 className="text-4xl font-normal text-black mb-8">Free Templates & Resources</h2>
+            <p className="text-lg text-gray-600 max-w-2xl">
               Download professional templates and promotional materials for your business
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {templates.map((template) => {
               const isDownloading = downloadingIds.has(template.id);
 
               return (
                 <Card
                   key={template.id}
-                  className="group w-[300px] h-[400px] hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                  className="group border-0 shadow-none hover:shadow-lg transition-all duration-300 overflow-hidden bg-white"
                 >
-                  <div className="relative w-full h-[200px] bg-white flex items-center justify-center">
+                  <div className="relative bg-gray-50 aspect-square">
                     <img
                       src={template.image}
                       alt={template.name}
-                      className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-105"
+                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                       crossOrigin="anonymous"
                     />
                     <div className="absolute top-3 left-3">
-                      <Badge className="bg-green-600">Free</Badge>
+                      <Badge className="bg-black text-white text-xs px-2 py-1 font-normal">
+                        Free
+                      </Badge>
                     </div>
                     {!isAuthenticated && (
                       <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
@@ -248,17 +250,16 @@ const ImageSection = () => {
                     )}
                   </div>
 
-                  <CardContent className="p-4 h-[200px] flex flex-col justify-around">
+                  <CardContent className="p-4">
                     <div className="space-y-3">
                       <div>
-                        <h3 className="font-semibold text-gray-900 mb-1">{template.name}</h3>
+                        <h3 className="font-medium text-black text-base mb-1">{template.name}</h3>
                         <p className="text-sm text-gray-600">{template.description}</p>
                       </div>
 
                       <Button
-                        className="w-full"
+                        className={`w-full ${isAuthenticated ? 'bg-black text-white hover:bg-gray-800' : 'bg-white text-black border border-gray-300 hover:bg-gray-50'}`}
                         onClick={() => handleDownload(template)}
-                        variant={isAuthenticated ? "default" : "outline"}
                         disabled={isDownloading}
                       >
                         {isDownloading ? (

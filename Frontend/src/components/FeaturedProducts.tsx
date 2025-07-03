@@ -12,7 +12,6 @@ import { useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
 
-
 interface FeaturedProductsProps {
   searchQuery?: string;
   onProductClick: (product: any) => void;
@@ -44,21 +43,15 @@ const FeaturedProducts = ({ searchQuery = "", onProductClick }: FeaturedProducts
     const handleInteraction = () => {
       const hash = window.location.hash;
       if (hash === "#products") {
-        // Toggle between py-24 and py-12 on repeat clicks
         setPaddingClass((prev) => (prev === "py-24" ? "py-24" : "py-24"));
       } else {
         setPaddingClass("py-12");
       }
-
     };
 
     window.addEventListener("hashchange", handleInteraction);
-
-    // Also listen to all anchor clicks
     const links = document.querySelectorAll('a[href="#products"]');
     links.forEach((link) => link.addEventListener("click", handleInteraction));
-
-    // Call once on mount
     handleInteraction();
 
     return () => {
@@ -72,28 +65,26 @@ const FeaturedProducts = ({ searchQuery = "", onProductClick }: FeaturedProducts
   useEffect(() => {
     setLocalSearchQuery(searchQuery);
   }, [searchQuery]);
+
   useEffect(() => {
-  const handleHashChange = () => {
-    const hash = window.location.hash;
-    setPaddingClass(hash === "#products" ? "py-24" : "py-12");
-  };
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      setPaddingClass(hash === "#products" ? "py-24" : "py-12");
+    };
 
-  window.addEventListener("hashchange", handleHashChange);
-  handleHashChange(); // Call once on mount
+    window.addEventListener("hashchange", handleHashChange);
+    handleHashChange();
 
-  return () => window.removeEventListener("hashchange", handleHashChange);
-}, []);
-
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
 
   useEffect(() => {
     let filtered = products;
 
-    // Filter by category
     if (selectedCategory !== "all") {
       filtered = filtered.filter(product => product.category === selectedCategory);
     }
 
-    // Filter by price range
     if (priceRange !== "all") {
       switch (priceRange) {
         case "under-100":
@@ -111,7 +102,6 @@ const FeaturedProducts = ({ searchQuery = "", onProductClick }: FeaturedProducts
       }
     }
 
-    // Filter by search query
     const query = localSearchQuery.toLowerCase();
     if (query) {
       filtered = filtered.filter(product =>
@@ -125,7 +115,7 @@ const FeaturedProducts = ({ searchQuery = "", onProductClick }: FeaturedProducts
   }, [selectedCategory, priceRange, localSearchQuery]);
 
   const handleProductClick = (product: any) => {
-    onProductClick(product); // Call parent's function instead of navigate
+    onProductClick(product);
   };
 
   const handleCustomizeClick = (product: any, e: React.MouseEvent) => {
@@ -178,56 +168,60 @@ const FeaturedProducts = ({ searchQuery = "", onProductClick }: FeaturedProducts
 
   return (
     <>
-      <section id="products" className={`${paddingClass} bg-gray-50 transition-all duration-500 ease-in-out`}>
+      <section id="products" className={`${paddingClass} bg-white transition-all duration-500 ease-in-out`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Our Products
+          <div className="text-left mb-12">
+            <h2 className="text-4xl font-normal text-black mb-8">
+              Products
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-6">
-              Discover our comprehensive range of customizable business assets
-            </p>
 
             {/* Filters */}
-            <div className="flex flex-wrap justify-center gap-4 mb-6">
-              <div className="flex items-center space-x-2">
-                <Filter className="h-4 w-4 text-gray-600" />
-                <span className="text-sm font-medium text-gray-600">Filters:</span>
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+              <div className="flex items-center gap-4">
+                <div className="text-sm text-gray-600">Filter:</div>
+                
+                <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                  <SelectTrigger className="w-32 border-gray-300 bg-white">
+                    <SelectValue placeholder="Availability" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Categories</SelectItem>
+                    {categories.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <Select value={priceRange} onValueChange={setPriceRange}>
+                  <SelectTrigger className="w-24 border-gray-300 bg-white">
+                    <SelectValue placeholder="Price" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {priceRanges.map((range) => (
+                      <SelectItem key={range.id} value={range.id}>
+                        {range.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
-              
-              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="w-40">
-                  <SelectValue placeholder="Category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Categories</SelectItem>
-                  {categories.map((category) => (
-                    <SelectItem key={category.id} value={category.id}>
-                      {category.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
 
-              <Select value={priceRange} onValueChange={setPriceRange}>
-                <SelectTrigger className="w-40">
-                  <SelectValue placeholder="Price Range" />
-                </SelectTrigger>
-                <SelectContent>
-                  {priceRanges.map((range) => (
-                    <SelectItem key={range.id} value={range.id}>
-                      {range.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <Input
-                placeholder="Search products..."
-                value={localSearchQuery}
-                onChange={(e) => setLocalSearchQuery(e.target.value)}
-                className="w-64"
-              />
+              <div className="flex items-center gap-4">
+                <div className="text-sm text-gray-600">Sort by:</div>
+                <Select defaultValue="alphabetical">
+                  <SelectTrigger className="w-40 border-gray-300 bg-white">
+                    <SelectValue placeholder="Alphabetically, A-Z" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="alphabetical">Alphabetically, A-Z</SelectItem>
+                    <SelectItem value="price-low">Price: Low to High</SelectItem>
+                    <SelectItem value="price-high">Price: High to Low</SelectItem>
+                  </SelectContent>
+                </Select>
+                <div className="text-sm text-gray-600">{filteredProducts.length} products</div>
+              </div>
             </div>
           </div>
 
@@ -247,52 +241,46 @@ const FeaturedProducts = ({ searchQuery = "", onProductClick }: FeaturedProducts
               </Button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredProducts.map((product) => {
                 const cartQuantity = getCartItemQuantity(product.id);
                 
                 return (
                   <Card 
                     key={product.id} 
-                    className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden cursor-pointer"
+                    className="group border-0 shadow-none hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer bg-white"
                     onClick={() => handleProductClick(product)}
                   >
-                    <div className="relative">
+                    <div className="relative bg-gray-50 aspect-square">
                       <img
                         src={product.image}
                         alt={product.name}
-                        className="w-full h-32 object-contain group-hover:scale-105 transition-transform duration-300"
+                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                       />
-                      <div className="absolute top-2 left-2">
+                      <div className="absolute top-3 left-3">
                         {product.tag && (
-                          <Badge variant="secondary" className="bg-white/90 text-gray-800 text-xs">
+                          <Badge className="bg-black text-white text-xs px-2 py-1 font-normal">
                             {product.tag}
                           </Badge>
                         )}
                       </div>
-                      {product.customizable && (
-                        <div className="absolute top-2 right-2">
-                          {/* <Badge className="bg-blue-600 text-xs">
-                            Customizable
-                          </Badge> */}
-                        </div>
-                      )}
                       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-2">
                         <Button 
                           size="sm" 
                           variant="secondary"
+                          className="bg-white text-black hover:bg-gray-100"
                           onClick={(e) => {
                             e.stopPropagation();
                             handleProductClick(product);
                           }}
                         >
-                          <Eye className="h-3 w-3 mr-1" />
+                          <Eye className="h-4 w-4 mr-1" />
                           View
                         </Button>
                         {product.customizable && (
                           <Button 
                             size="sm" 
-                            className="bg-blue-600 hover:bg-blue-700"
+                            className="bg-black text-white hover:bg-gray-800"
                             onClick={(e) => handleCustomizeClick(product, e)}
                           >
                             Customize
@@ -301,78 +289,62 @@ const FeaturedProducts = ({ searchQuery = "", onProductClick }: FeaturedProducts
                       </div>
                     </div>
                     
-                    <CardContent className="p-3">
-                      <div className="space-y-2">
+                    <CardContent className="p-4">
+                      <div className="space-y-3">
                         <div>
-                          <h3 className="font-medium text-gray-900 text-sm mb-1 line-clamp-1">{product.name}</h3>
-                          <p className="text-xs text-gray-600 line-clamp-2">{product.description}</p>
-                        </div>
-                        
-                        <div className="flex items-center space-x-1">
-                          <div className="flex items-center space-x-1">
-                            {[...Array(5)].map((_, i) => (
-                              <Star 
-                                key={i} 
-                                className={`h-3 w-3 ${i < Math.floor(product.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} 
-                              />
-                            ))}
-                          </div>
-                          <span className="text-xs text-gray-600">({product.rating})</span>
+                          <h3 className="font-medium text-black text-base mb-1">{product.name}</h3>
                         </div>
                         
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-1">
-                            <span className="text-sm font-bold text-gray-900">₹{product.price}</span>
+                          <div className="flex items-center space-x-2">
                             {product.originalPrice && (
-                              <span className="text-xs text-gray-500 line-through">₹{product.originalPrice}</span>
+                              <span className="text-sm text-gray-500 line-through">Rs. {product.originalPrice}.00</span>
                             )}
+                            <span className="text-lg font-medium text-black">Rs. {product.price}.00</span>
                           </div>
                           
                           {cartQuantity > 0 ? (
-                            <div className="flex items-center space-x-1">
+                            <div className="flex items-center space-x-2">
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="h-6 w-6 p-0"
+                                className="h-8 w-8 p-0"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleQuantityChange(product, cartQuantity - 1);
                                 }}
                               >
-                                <Minus className="h-3 w-3" />
+                                <Minus className="h-4 w-4" />
                               </Button>
-                              <span className="text-xs font-medium min-w-[20px]  text-center">
+                              <span className="text-sm font-medium min-w-[24px] text-center">
                                 {cartQuantity}
                               </span>
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="h-6 w-6 p-0"
+                                className="h-8 w-8 p-0"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleQuantityChange(product, cartQuantity + 1);
                                 }}
                               >
-                                <Plus className="h-3 w-3" />
+                                <Plus className="h-4 w-4" />
                               </Button>
                             </div>
                           ) : (
                             <Button 
                               size="sm" 
-                              className="bg-blue-600 hover:bg-blue-700 text-xs px-2 py-1 h-6"
+                              className="bg-black text-white hover:bg-gray-800 text-sm px-4 py-2"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 if (product.customizable) {
                                   handleCustomizeClick(product, e);
                                 } else {
-                                  // Add directly to cart for non-customizable items
                                   handleAddToCart(product);
-                                  console.log('Add to cart:', product);
                                 }
                               }}
                             >
-                              <ShoppingCart className="h-3 w-3 mr-1" />
-                              Add To Cart
+                              Add to cart
                             </Button>
                           )}
                         </div>
