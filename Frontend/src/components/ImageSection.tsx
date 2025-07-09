@@ -235,7 +235,7 @@ const ImageSection = () => {
                     <img
                       src={template.image}
                       alt={template.name}
-                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-contain group-hover:scale-95 transition-transform duration-300"
                       crossOrigin="anonymous"
                     />
                     <div className="absolute top-3 left-3">

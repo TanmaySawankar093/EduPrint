@@ -1,6 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
+import darklogo from "../assets/darkbglogo.png"; // Adjust the path as necessary
 
 const Footer = () => {
   const [toggledCategories, setToggledCategories] = useState({});
@@ -50,7 +51,7 @@ const Footer = () => {
           {/* Company Info */}
           <div className="lg:col-span-2">
             <div className="mb-4 lg:mb-6">
-              <h3 className="text-xl lg:text-2xl font-bold text-white mb-2">Eduprint</h3>
+              <img src={darklogo} alt="Eduprint Logo" className="h-6 lg:h-12 mb-2" />
               <p className="text-gray-400 mb-3 lg:mb-4 text-sm lg:text-base">
                 Professional business stationery and promotional materials for the modern workplace. 
                 Part of the Educern Organization.
@@ -64,11 +65,11 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="h-4 w-4 text-blue-400 flex-shrink-0" />
-                <span>180 1234 123</span>
+                <span>+91 9760240404</span>
               </div>
               <div className="flex items-start space-x-3">
                 <MapPin className="h-4 w-4 text-blue-400 flex-shrink-0 mt-0.5" />
-                <span className="text-xs lg:text-sm">Street 23, Thane, Mumbai, Maharashtra, IN 423562</span>
+                <span className="text-xs lg:text-sm">472, Kasar Ali, Opp. Markandeshwar Mandir, Anjur, Bhiwandi, Thane, Maharashtra, India - 421302</span>
               </div>
             </div>
 
